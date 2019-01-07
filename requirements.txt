@@ -1,2 +1,2 @@
 feedparser==5.2.1
-requests==2.20.0
+requests==2.21.0
