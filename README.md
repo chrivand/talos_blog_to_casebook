@@ -1,6 +1,6 @@
 # Cisco Talos Blog Parser to Casebook
 
-This is a sample script how to parse the Talos blogs, and automatically add observables to Cisco Casebook.
+This is a sample script how to parse the Talos blogs, and automatically add observables to Cisco Casebook. The enables Security Researchers to quickly see if the observables from Talos have been seen in their environment (using Cisco Threat Response (CTR). For more information on how to use Cisco Threat Response, please review this link: https://visibility.amp.cisco.com/#/help/introduction
 
 ## Overview
 1. The script leverages the Talos Blog RSS feed to retrieve all the current blogs.
