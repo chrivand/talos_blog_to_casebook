@@ -4,12 +4,12 @@ This is a sample script how to parse the Talos blogs, and automatically add obse
 
 ## Overview
 1. The script leverages the Talos Blog RSS feed to retrieve all the current blogs.
-2. It will then check if this is the first time the script runs.
-  * If the script runs for the first time, it will parse through all blogs.
-  * If the script has run before, it will check if there was an update to the blog (using the “last_modified” element from RSS).
-    * If the was an update -> parse all the new blogs.
-    * If there was no update -> do nothing.
-3. During the parsing of the blog, noise is removed like hyperlinks to other webpages (e.g. Snort.org).
+2. It will then check if this is the first time the script runs:
+   * If the script runs for the first time, it will parse through all blogs.
+   * If the script has run before, it will check if there was an update to the blog (using the “last_modified” element from RSS).
+     * If the was an update -> parse all the new blogs.
+     * If there was no update -> do nothing.
+3. During the parsing of the blog, noise is removed like hyperlinks to other webpages (e.g. Snort.org). This greatly decreases false positives in the casebooks.
 4. After this the CTR API is used to retrieve all the observables from the cleaned blog.
 5. The last step is to create a CTR Casebook with the retrieved observables.
 
@@ -50,4 +50,10 @@ This is a sample script how to parse the Talos blogs, and automatically add obse
   python3.6 rss_feed_to_casebook.py
   ```
 
-16. You are now done. Please feel free to have to use **crontab** to run the script every day. The script will handle this, and only create a new casebook if a new blog is added.
+16. You are now done. 
+
+## Notes and Road Map
+* Please feel free to have to use **crontab** to run the script every day. The script will handle this, and only create a new casebook if a new blog is added. There is detailed information on how to use that here: https://pypi.org/project/python-crontab/. 
+* Otherwise you can also use a function I previously wrote, which is the **intervalScheduler** function in this script: https://github.com/chrivand/Firepower_O365_Feed_Parser/blob/VERSION-3.0/O365WebServiceParser.py. 
+* This script works with the Talos RSS feed, but potentially it will also work with other RSS feeds. You will need to change the **url_feed** variable to another RSS feed. Also, you might need to clean the hyperlinks etc. out of the blogs in a different way (even though I am doing this quite generic).
+* I will keep updating this script and otherwise you can also do a pull request with an update.
