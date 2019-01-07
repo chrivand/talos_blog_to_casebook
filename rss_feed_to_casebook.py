@@ -115,9 +115,12 @@ def parse_rss_feed(url_feed):
             # retrieve title for casebook indexing              
             entry_title = entry.title
 
+            # retrieve link for casebook description
+            entry_link = entry.link
+
             # if observables were returned (list not empty), create a casebook
             if returned_observables != "[]":
-                new_casebook(returned_observables,entry_title,access_token)
+                new_casebook(returned_observables,entry_title,entry_link,access_token)
             else:
                 print(f"No new casebook created (no observables found) from: {entry_title}\n")
               
@@ -174,9 +177,12 @@ def parse_rss_feed(url_feed):
                     # retrieve title for casebook indexing              
                     entry_title = entry.title
 
+                    # retrieve link for casebook description 
+                    entry_link = entry.link
+
                     # if observables were returned (list not empty), create a casebook
                     if returned_observables != "[]":
-                        new_casebook(returned_observables,entry_title,access_token)
+                        new_casebook(returned_observables,entry_title,entry_link,access_token)
                     else:
                         print(f"No new casebook created (no observables found) from: {entry_title}\n")
 
@@ -189,7 +195,6 @@ def parse_rss_feed(url_feed):
             write_config()
     return
     
-
 ### this function will parse raw text and return the observables and types
 def return_observables(raw_text,access_token):
 
@@ -211,7 +216,7 @@ def return_observables(raw_text,access_token):
         print(f"Observable parsing request failed, status code: {response.status_code}\n")
 
 ### this function post list of observables to new casebook
-def new_casebook(returned_observables,entry_title,access_token):
+def new_casebook(returned_observables,entry_title,entry_link,access_token):
 
     bearer_token = 'Bearer ' + access_token
 
@@ -221,11 +226,13 @@ def new_casebook(returned_observables,entry_title,access_token):
         'Authorization': bearer_token
     }
 
+    # create title and description for SOC researcher to have more context
     casebook_title = "New Case by RSS_feed: " + entry_title
+    casebook_description = "Python generated casebook (Talos RSS_feed): " + entry_link
 
     # create right json format to create casebook
     casebook_json = json.dumps({
-        'description': "Python generated casebook (Talos RSS_feed)",
+        'description': casebook_description,
         'observables': json.loads(returned_observables),
         "type": "casebook",
         "title": casebook_title 
