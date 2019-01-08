@@ -11,7 +11,7 @@ This is a sample script how to parse the Talos blogs, and automatically add obse
      * If there was no update -> do nothing.
 3. During the parsing of the blog, noise is removed like hyperlinks to other webpages (e.g. Snort.org). This greatly decreases false positives in the casebooks.
 4. After this the CTR API is used to retrieve all the observables from the cleaned blog.
-5. The last step is to create a CTR Casebook with the retrieved observables.
+5. The last step is to create a CTR Casebook with the retrieved observables. The title of the blog and the link to it, will be added into the Case. Optionally a Webex Teams message is sent to a room to update the Threat Responder.
 
 
 ## Installation
@@ -26,31 +26,34 @@ This is a sample script how to parse the Talos blogs, and automatically add obse
 9. Add an optional description if needed.
 10. Click on **Add New Client**.
 11. The **Client ID** and **Client Secret** are now shown to you. Do NOT click on **close** until you have copy pasted these credentials to the config.json file in the repository.
-12. Make sure that the config.json file looks liks this:
+12. It is possible to integrate the script with Webex Teams. In order to do that, an API Access Token and a Room ID needs to be entered in the config.json file. Please retrieve your key from: https://developer.webex.com/docs/api/getting-started. Then create a dedicated Webex Teams space for these notifications and retrieve the Room ID from: https://developer.webex.com/docs/api/v1/rooms/list-rooms.
+13. Make sure that the config.json file looks liks this (with the right keys and ID's filled in between the quotes):
 
   ```
   {
-      "client_id": "client-XXXXXX-XXXX-XXXX-XXXX-XXXXXXXX",
-      "client_secret": "XxXXxXXX_XXXX_XXxXX-XXXxX-XXXxXxXXXxX",
+      "client_id": "<your_client_id>",
+      "client_secret": "<your_client_secret",
       "last_etag": "",
-      "last_modified": ""
+      "last_modified": "",
+      "webex_access_token": "<your_webex_access_token>",
+      "webex_room_id": "<your_webex_room_id"
   }
   ```
   
-13.  You are now ready to execute the script. Go to a terminal and change directory in to the folder that contains your **rss_feed_to_casebook.py** and **config.json** file. 
-14. Make sure you have the correct libraries installed by executing the **requirements.txt** file (use a Python virtual environment if preferred: 
+14.  You are now ready to execute the script. Go to a terminal and change directory in to the folder that contains your **rss_feed_to_casebook.py** and **config.json** file. 
+15. Make sure you have the correct libraries installed by executing the **requirements.txt** file (use a Python virtual environment if preferred: 
 
   ```
   pip3 install -r requirements.txt
   ```
   
-15. Now execute the **rss_feed_to_casebook.py** script:
+16. Now execute the **rss_feed_to_casebook.py** script:
 
   ```
   python3.6 rss_feed_to_casebook.py
   ```
 
-16. You are now done. 
+17. You are now done. 
 
 ## Notes and Road Map
 * Please feel free to have to use **crontab** to run the script every day. The script will handle this, and only create a new casebook if a new blog is added. There is detailed information on how to use that here: https://pypi.org/project/python-crontab/. 
