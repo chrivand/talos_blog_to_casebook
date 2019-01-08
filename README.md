@@ -41,7 +41,7 @@ This is a sample script how to parse the Talos blogs, and automatically add obse
   ```
   
 14.  You are now ready to execute the script. Go to a terminal and change directory in to the folder that contains your **rss_feed_to_casebook.py** and **config.json** file. 
-15. Make sure you have the correct libraries installed by executing the **requirements.txt** file (use a Python virtual environment if preferred: 
+15. Make sure you have the correct libraries installed by executing the **requirements.txt** file (use a Python virtual environment if preferred): 
 
   ```
   pip3 install -r requirements.txt
