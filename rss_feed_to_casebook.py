@@ -20,6 +20,7 @@ import feedparser
 import config
 import time
 import os
+import ciscosparkapi
 
 ### this function opens config.json
 def open_config():
@@ -227,21 +228,33 @@ def new_casebook(returned_observables,entry_title,entry_link,access_token):
     }
 
     # create title and description for SOC researcher to have more context
-    casebook_title = "New Case by RSS_feed: " + entry_title
+    casebook_title = "New Case added by RSS_feed: " + entry_title
     casebook_description = "Python generated casebook (Talos RSS_feed): " + entry_link
 
     # create right json format to create casebook
     casebook_json = json.dumps({
-        'description': casebook_description,
-        'observables': json.loads(returned_observables),
-        "type": "casebook",
-        "title": casebook_title 
+        "title": casebook_title,
+        "description": casebook_description,
+        "observables": json.loads(returned_observables),
+        "type": "casebook"   
     })
 
-    # post request to create (maybe need this API endpoint: https://intel.amp.cisco.com/ctia/casebook ?)
+    # post request to create casebook
     response = requests.post('https://private.intel.amp.cisco.com/ctia/casebook', headers=headers, data=casebook_json)
     if response.status_code == 201:
         print(f"[201] Success, casebook added: {entry_title}\n")
+        
+        # if Webex Teams tokens set, then send message to Webex room
+        if config_file['webex_access_token'] is '' or config_file['webex_room_id'] is '':
+
+            # user feed back
+            print("Webex Teams not set.\n\n")
+        else:            
+            # instantiate the Webex handler with the access token
+            webex = ciscosparkapi.CiscoSparkAPI(config_file['webex_access_token'])
+
+            # post a message to the specified Webex room
+            message = webex.messages.create(config_file['webex_room_id'], text=casebook_title)
     else:
         print(f"Something went wrong while posting the casebook to CTR, status code: {response.status_code}\n")
 
