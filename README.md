@@ -9,7 +9,7 @@ This is a sample script how to parse the Talos blogs, and automatically add obse
    * If the script has run before, it will check if there was an update to the blog (using the “last_modified” element from RSS).
      * If the was an update -> parse all the new blogs.
      * If there was no update -> do nothing.
-3. During the parsing of the blog, noise is removed like hyperlinks to other webpages (e.g. Snort.org). This greatly decreases false positives in the casebooks.
+3.	During the parsing of the blog, an attempt is made to remove False Positives, like hyperlinks to other webpages (e.g. Snort.org). 
 4. After this the CTR API is used to retrieve all the observables from the cleaned blog.
 5. The last step is to create a CTR Casebook with the retrieved observables. The title of the blog and the link to the blog, will be added into the Case. Optionally a Webex Teams message is sent to a room to update the Threat Responder.
 
