@@ -2,5 +2,7 @@
     "client_id": "<your_client_id>",
     "client_secret": "<your_client_secret>",
     "last_etag": "",
-    "last_modified": ""
+    "last_modified": "",
+    "webex_access_token": "<your_webex_access_token>",
+    "webex_room_id": "<your_webex_room_id"
 }
