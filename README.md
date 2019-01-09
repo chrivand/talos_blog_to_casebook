@@ -1,3 +1,5 @@
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/chrivand/talos_blog_to_casebook)
+
 # Cisco Talos Blog Parser to Casebook
 
 This is a sample script to parse the Talos blog and automatically add observables to Cisco Casebook. This enables Security Researchers and Threat Responders in a SOC to quickly see if the observables from Talos have been seen in their environment (by leveraging Cisco Threat Response (CTR)). For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction]().
