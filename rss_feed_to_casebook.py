@@ -276,7 +276,6 @@ if __name__ == "__main__":
         get_CTR_access_token(client_id,client_secret)
 
         # activate the RSS feed parser for the Talos blog
-        #url_feed = "http://feeds.feedburner.com/feedburner/Talos"
         url_feed = config_file['url_feed']
         parse_rss_feed(url_feed)
 
