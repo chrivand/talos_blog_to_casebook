@@ -18,7 +18,8 @@ import requests
 import json
 import feedparser
 import config
-import time
+#import time
+from datetime import datetime
 import os
 import ciscosparkapi
 
@@ -68,6 +69,38 @@ def get_CTR_access_token(client_id,client_secret):
         # user feedback
         print(f"Access token request failed, status code: {response.status_code}\n")
 
+### this function removes hyperlinks and other false positives from a blog post
+def clean_entry(entry_description):
+    
+    # split text into words
+    words_entry = entry_description.split() 
+    
+    # create empty list for words which do not contain any of the below noise + for every entry clear it again
+    cleaned_entry = []
+
+    # remove noise from blogs (hyperlinks etc.)
+    for word in words_entry:
+        if word.startswith('href="'):
+            pass
+        elif word.startswith('src="'):
+            pass
+        elif word.startswith('xmlns:'):
+            pass
+        elif word.startswith('url="'):
+            pass
+        elif word.startswith('Snort.org'):
+            pass
+        else:
+            cleaned_entry.append(word)
+    
+    # stitch the blog back together (list of words to string)
+    space_words = " "
+    cleaned_entry_str = space_words.join(cleaned_entry)
+
+    # return cleaned string that contains all words (needed to retrieve observables)
+    return cleaned_entry_str
+
+
 ### this function parses a RSS feed into raw text
 def parse_rss_feed(url_feed):
 
@@ -85,30 +118,8 @@ def parse_rss_feed(url_feed):
         # run through all entries and create casebook per entry     
         for entry in response.entries:
 
-            # split text into words
-            words_entry = entry.description.split() 
-
-            # create empty list for words which do not contain any of the below noise + for every entry clear it again
-            cleaned_entry = []
-
-            # remove noise from blogs (hyperlinks etc.)
-            for word in words_entry:
-                if word.startswith('href="'):
-                    pass
-                elif word.startswith('src="'):
-                    pass
-                elif word.startswith('xmlns:'):
-                    pass
-                elif word.startswith('url="'):
-                    pass
-                elif word.startswith('Snort.org'):
-                    pass
-                else:
-                    cleaned_entry.append(word)
-            
-            # stitch the blog back together
-            space_words = " "
-            cleaned_entry_str = space_words.join(cleaned_entry)
+            # send the description of the blog entry (containing the body) to cleaning function to remove hyperlinks etc.
+            cleaned_entry_str = clean_entry(entry.description)
 
             # retrieve observables
             returned_observables = return_observables(cleaned_entry_str,access_token)
@@ -147,30 +158,8 @@ def parse_rss_feed(url_feed):
                     # user feedback
                     print(f"Blog detected that was published later than last modified: {entry.title}\n")
 
-                    # split text into words
-                    words_entry = entry.description.split() 
-
-                    # create empty list for words which do not contain any of the below noise + for every entry clear it again
-                    cleaned_entry = []
-
-                    # remove noise from blogs (hyperlinks etc.)
-                    for word in words_entry:
-                        if word.startswith('href="'):
-                            pass
-                        elif word.startswith('src="'):
-                            pass
-                        elif word.startswith('xmlns:'):
-                            pass
-                        elif word.startswith('url="'):
-                            pass
-                        elif word.startswith('Snort.org'):
-                            pass
-                        else:
-                            cleaned_entry.append(word)
-                    
-                    # stitch the blog back together
-                    space_words = " "
-                    cleaned_entry_str = space_words.join(cleaned_entry)
+                    # send the description of the blog entry (containing the body) to cleaning function to remove hyperlinks etc.
+                    cleaned_entry_str = clean_entry(entry.description)
 
                     # retrieve observables
                     returned_observables = return_observables(cleaned_entry_str,access_token)
@@ -230,13 +219,15 @@ def new_casebook(returned_observables,entry_title,entry_link,access_token):
     # create title and description for SOC researcher to have more context
     casebook_title = "New Case added by RSS_feed: " + entry_title
     casebook_description = "Python generated casebook (Talos RSS_feed): " + entry_link
+    casebook_datetime = datetime.now().isoformat() + "Z"
 
     # create right json format to create casebook
     casebook_json = json.dumps({
         "title": casebook_title,
         "description": casebook_description,
         "observables": json.loads(returned_observables),
-        "type": "casebook"   
+        "type": "casebook",
+        "timestamp": casebook_datetime   
     })
 
     # post request to create casebook
@@ -253,8 +244,12 @@ def new_casebook(returned_observables,entry_title,entry_link,access_token):
             # instantiate the Webex handler with the access token
             webex = ciscosparkapi.CiscoSparkAPI(config_file['webex_access_token'])
 
-            # post a message to the specified Webex room
-            message = webex.messages.create(config_file['webex_room_id'], text=casebook_title)
+            # post a message to the specified Webex room 
+            try:
+                message = webex.messages.create(config_file['webex_room_id'], text=casebook_title)
+            # error handling, if for example the Webex API key expired
+            except Exception:
+                print("Webex authentication failed... Please make sure Webex Teams API key has not expired. Please review developer.webex.com for more info.\n")
     else:
         print(f"Something went wrong while posting the casebook to CTR, status code: {response.status_code}\n")
 
@@ -281,7 +276,8 @@ if __name__ == "__main__":
         get_CTR_access_token(client_id,client_secret)
 
         # activate the RSS feed parser for the Talos blog
-        url_feed = "http://feeds.feedburner.com/feedburner/Talos"
+        #url_feed = "http://feeds.feedburner.com/feedburner/Talos"
+        url_feed = config_file['url_feed']
         parse_rss_feed(url_feed)
 
     except KeyboardInterrupt:
