@@ -151,8 +151,7 @@ def parse_rss_feed(url_feed):
             # run through all entries and create casebook per entry     
             for entry in response.entries:
 
-                # TODO: duplicate code, maybe turn into separate function?
-
+                # check if the blog is newer than then last one
                 if list(entry.published_parsed) > config_file['last_modified']:
 
                     # user feedback
@@ -211,9 +210,9 @@ def new_casebook(returned_observables,entry_title,entry_link,access_token):
     bearer_token = 'Bearer ' + access_token
 
     headers = {
+        'Authorization': bearer_token,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': bearer_token
+        'Accept': 'application/json'
     }
 
     # create title and description for SOC researcher to have more context
