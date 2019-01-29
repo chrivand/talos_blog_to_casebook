@@ -18,10 +18,11 @@ import requests
 import json
 import feedparser
 import config
-#import time
 from datetime import datetime
 import os
 import ciscosparkapi
+
+
 
 ### this function opens config.json
 def open_config():
@@ -33,10 +34,14 @@ def open_config():
     else:
         print("No config.json file, please make sure config.json file is in same directory.\n")
 
+
+
 ### this function writes to config.json
 def write_config():
     with open("config.json", 'w') as output_file:
         json.dump(config_file, output_file, indent=4)
+
+
 
 ### this function requests access token for OAuth2 for other CTR API requests
 def get_CTR_access_token(client_id,client_secret):
@@ -69,6 +74,8 @@ def get_CTR_access_token(client_id,client_secret):
         # user feedback
         print(f"Access token request failed, status code: {response.status_code}\n")
 
+
+
 ### this function removes hyperlinks and other false positives from a blog post
 def clean_entry(entry_description):
     
@@ -99,6 +106,81 @@ def clean_entry(entry_description):
 
     # return cleaned string that contains all words (needed to retrieve observables)
     return cleaned_entry_str
+
+
+
+### this function will parse raw text and return the observables and types
+def return_observables(raw_text,access_token):
+
+    bearer_token = 'Bearer ' + access_token
+
+    headers = {
+        'Authorization': bearer_token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    data = json.dumps({"content":raw_text})
+
+    response = requests.post('https://visibility.amp.cisco.com/iroh/iroh-inspect/inspect', headers=headers, data=data)
+    #check if request was succesful
+    if response.status_code == 200:
+        return(response.text) 
+    else:
+        print(f"Observable parsing request failed, status code: {response.status_code}\n")
+
+
+
+### this function post list of observables to new casebook
+def new_casebook(returned_observables,entry_title,entry_link,access_token):
+
+    bearer_token = 'Bearer ' + access_token
+
+    headers = {
+        'Authorization': bearer_token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    # create title and description for SOC researcher to have more context
+    casebook_title = "New Case added by RSS_feed: " + entry_title
+    casebook_description = "Python generated casebook (Talos RSS_feed): " + entry_link
+    casebook_datetime = datetime.now().isoformat() + "Z"
+
+    # create right json format to create casebook
+    casebook_json = json.dumps({
+        "title": casebook_title,
+        "description": casebook_description,
+        "observables": json.loads(returned_observables),
+        "type": "casebook",
+        "timestamp": casebook_datetime   
+    })
+
+    # post request to create casebook
+    response = requests.post('https://private.intel.amp.cisco.com/ctia/casebook', headers=headers, data=casebook_json)
+    if response.status_code == 201:
+        print(f"[201] Success, casebook added: {entry_title}\n")
+        
+        # if Webex Teams tokens set, then send message to Webex room
+        if config_file['webex_access_token'] is '' or config_file['webex_room_id'] is '':
+
+            # user feed back
+            print("Webex Teams not set.\n\n")
+        else:            
+            # instantiate the Webex handler with the access token
+            webex = ciscosparkapi.CiscoSparkAPI(config_file['webex_access_token'])
+
+            # post a message to the specified Webex room 
+            try:
+                message = webex.messages.create(config_file['webex_room_id'], text=casebook_title)
+            # error handling, if for example the Webex API key expired
+            except Exception:
+                print("Webex authentication failed... Please make sure Webex Teams API key has not expired. Please review developer.webex.com for more info.\n")
+    else:
+        print(f"Something went wrong while posting the casebook to CTR, status code: {response.status_code}\n")
+
+    return response.text
+
 
 
 ### this function parses a RSS feed into raw text
@@ -184,75 +266,7 @@ def parse_rss_feed(url_feed):
             write_config()
     return
     
-### this function will parse raw text and return the observables and types
-def return_observables(raw_text,access_token):
 
-    bearer_token = 'Bearer ' + access_token
-
-    headers = {
-        'Authorization': bearer_token,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
-
-    data = json.dumps({"content":raw_text})
-
-    response = requests.post('https://visibility.amp.cisco.com/iroh/iroh-inspect/inspect', headers=headers, data=data)
-    #check if request was succesful
-    if response.status_code == 200:
-        return(response.text) 
-    else:
-        print(f"Observable parsing request failed, status code: {response.status_code}\n")
-
-### this function post list of observables to new casebook
-def new_casebook(returned_observables,entry_title,entry_link,access_token):
-
-    bearer_token = 'Bearer ' + access_token
-
-    headers = {
-        'Authorization': bearer_token,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
-
-    # create title and description for SOC researcher to have more context
-    casebook_title = "New Case added by RSS_feed: " + entry_title
-    casebook_description = "Python generated casebook (Talos RSS_feed): " + entry_link
-    casebook_datetime = datetime.now().isoformat() + "Z"
-
-    # create right json format to create casebook
-    casebook_json = json.dumps({
-        "title": casebook_title,
-        "description": casebook_description,
-        "observables": json.loads(returned_observables),
-        "type": "casebook",
-        "timestamp": casebook_datetime   
-    })
-
-    # post request to create casebook
-    response = requests.post('https://private.intel.amp.cisco.com/ctia/casebook', headers=headers, data=casebook_json)
-    if response.status_code == 201:
-        print(f"[201] Success, casebook added: {entry_title}\n")
-        
-        # if Webex Teams tokens set, then send message to Webex room
-        if config_file['webex_access_token'] is '' or config_file['webex_room_id'] is '':
-
-            # user feed back
-            print("Webex Teams not set.\n\n")
-        else:            
-            # instantiate the Webex handler with the access token
-            webex = ciscosparkapi.CiscoSparkAPI(config_file['webex_access_token'])
-
-            # post a message to the specified Webex room 
-            try:
-                message = webex.messages.create(config_file['webex_room_id'], text=casebook_title)
-            # error handling, if for example the Webex API key expired
-            except Exception:
-                print("Webex authentication failed... Please make sure Webex Teams API key has not expired. Please review developer.webex.com for more info.\n")
-    else:
-        print(f"Something went wrong while posting the casebook to CTR, status code: {response.status_code}\n")
-
-    return response.text
 
 ### main script 
 if __name__ == "__main__":
