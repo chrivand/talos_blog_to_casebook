@@ -38,7 +38,8 @@ This is a sample script to parse the Talos blog and automatically add observable
       "last_etag": "",
       "last_modified": "",
       "webex_access_token": "<your_webex_access_token>",
-      "webex_room_id": "<your_webex_room_id"
+      "webex_room_id": "<your_webex_room_id",
+      "url_feed": "http://feeds.feedburner.com/feedburner/Talos"
   }
   ```
   
