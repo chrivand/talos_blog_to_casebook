@@ -15,6 +15,7 @@ print("\n\n***************\n\nCREATED BY CHRISTOPHER VAN DER MADE (CHRIVAND)\n\n
 # or implied.
 
 import requests
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import json
 import feedparser
@@ -165,40 +166,28 @@ def clean_entry(entry_link):
     '''
     this function removes hyperlinks and other false positives from a blog post
     ''' 
-    # retrieve entire blog from original link and ingest text only
-    response = requests.get(entry_link)
-    soup = BeautifulSoup(response.content, "html.parser")
-    entire_blog = soup.get_text()
 
-    # split text into words
-    words_entry = entire_blog.split() 
-    
-    # create empty list for words which do not contain any of the below noise + for every entry clear it again
-    cleaned_entry = []
+    # retrieve text with html parser
+    html = urlopen(entry_link).read()
+    soup = BeautifulSoup(html, "html.parser")
 
-    # remove noise from blogs (hyperlinks etc.)
-    for word in words_entry:
-        if word.startswith('href="'):
-            pass
-        elif word.startswith('src="'):
-            pass
-        elif word.startswith('xmlns:'):
-            pass
-        elif word.startswith('url="'):
-            pass
-        elif word.startswith('Snort.org'):
-            pass
-        elif word.startswith("'https://www.googletagmanager.com"):
-            pass
-        else:
-            cleaned_entry.append(word)
-    
-    # stitch the blog back together (list of words to string)
-    space_words = " "
-    cleaned_entry_str = space_words.join(cleaned_entry)
+    # kill all script and style elements
+    for script in soup(["script", "style"]):
+        script.extract()    # rip it out
+
+    # get text
+    raw_text = soup.body.get_text(separator=' ')
+
+    # break into lines and remove leading and trailing space on each
+    lines = (line.strip() for line in raw_text.splitlines())
+    # break multi-headlines into a line each
+    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    # drop blank lines
+    parsed_text = '\n'.join(chunk for chunk in chunks if chunk)
+    parsed_text = str(parsed_text.encode('utf8'))
 
     # retrieve observables from text
-    returned_observables_json = return_observables(cleaned_entry_str)
+    returned_observables_json = return_observables(parsed_text)
 
     # return non clean (malicious, unkown etc.) observables only
     non_clean_observables_json = return_non_clean_observables(returned_observables_json) 
@@ -308,7 +297,7 @@ def new_casebook(feed_name,returned_observables_json,returned_sightings,entry_ti
     # post request to create casebook
     response = requests.post('https://private.intel.amp.cisco.com/ctia/casebook', headers=headers, data=casebook_json)
     if response.status_code == 201:
-        print(f"[201] Success, casebook added from {feed_name}: {entry_title}\n")
+        print(f"[201] Success, case added to Casebook added from {feed_name}: {entry_title}\n")
         
         # if Webex Teams tokens set, then send message to Webex room
         if config_file['webex_access_token'] is '' or config_file['webex_room_id'] is '':
