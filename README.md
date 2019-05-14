@@ -7,7 +7,7 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!) and aut
 ## Release notes version 2.0
 1. The ciscospark library has been updated to the newer webexteamssdk library.
 2. The script now also removes all clean observables from the case to stop false positives. Often legitimate websites are added in a blog, but are not an observable associated directly with the malware campaign. This causes Target Sightings, without them being of much interest. Removing these from the investigation is also better for the performance of the script. 
-3. The script now also checks for Target Sightings. If there is a Sighting of a Target, the Webex Teams message and the Case description in Casebook will get a "HIGH PRIOIRTY" tag.
+3. The script now also checks for Target Sightings. If there is a Sighting of a Target, the Webex Teams message and the Case description in Casebook will get a "HIGH PRIORITY" tag.
 4. The script now has support for more RSS feeds. The FortiGuard and Unit42 RSS feeds have now been added as example (on top of the Talos RSS Feed).
 5. The script will use the RSS feed "entry.link" to download the full blogpost, and does not just look at the "entry.description" of the RSS feed. The FortiGuard blog for example does not include the observables in their RSS feed, but only shows them on the actual original blog post.
 6. Since the script has been expanded, it now can run longer than 10 minutes. This is actually the expiration time of the CTR OAuth token. Therefore, every API call now retrieves a new OAuth token.
