@@ -2,7 +2,7 @@
 
 # Cisco RSS Feed Blog Parser to Cisco Threat Response Casebook [NEW VERSION]
 
-This is a sample script to parse the Talos blog and automatically add observables to Cisco Casebook. This enables Security Researchers and Threat Responders in a SOC to quickly see if the observables from Talos have been seen in their environment (by leveraging Cisco Threat Response (CTR)). For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction]().
+This is a sample script to parse the Cisco Talos blog (and other blogs!) and automatically add observables to Cisco Casebook. This enables Security Researchers and Threat Responders in a SOC to quickly see if the observables from Talos have been seen in their environment (by leveraging Cisco Threat Response (CTR)). For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction]().
 
 ## Release notes version 2.0
 1. The ciscospark library has been updated to the newer webexteamssdk library.
@@ -39,7 +39,7 @@ This is a sample script to parse the Talos blog and automatically add observable
 9. Add an optional description if needed.
 10. Click on **Add New Client**.
 11. The **Client ID** and **Client Secret** are now shown to you. Do NOT click on **close** until you have copy-pasted these credentials to the config.json file in the repository.
-12. It is possible to integrate the script with Webex Teams. In order to do that, an API Access Token and a Room ID need to be entered in the config.json file. Please retrieve your key from: [https://developer.webex.com/docs/api/getting-started](). Then create a dedicated Webex Teams space for these notifications and retrieve the Room ID from: [https://developer.webex.com/docs/api/v1/rooms/list-rooms]().
+12. It is possible to integrate the script with Webex Teams. In order to do that, an API Access Token and a Room ID need to be entered in the config.json file. Please retrieve your key from: [https://developer.webex.com/docs/api/getting-started](). Then create a dedicated Webex Teams space for these notifications and retrieve the Room ID from: [https://developer.webex.com/docs/api/v1/rooms/list-rooms](). Please be aware that the personal token from the getting started page only works for 12 hours. Please follow these steps: [https://developer.webex.com/docs/integrations](). This is roadmapped for v3.0.
 13. Make sure that the config.json file looks like this (with the right keys and IDs filled in between the quotes):
 
   ```
@@ -82,3 +82,4 @@ This is a sample script to parse the Talos blog and automatically add observable
 * This script works with the Talos, FortiGuard and Unit42 RSS feed, but potentially it will also work with other RSS feeds. You will need to add or change the **url_feeds** variable (in config.json) with another RSS feed. Also, you might need to clean the hyperlinks, etc., out of the blogs in a different way (even though I am doing this quite genericly).
 * I will keep updating this script and you can also do a pull request with an update.
 * Please open an "Issue" if there is something not working or if you have a feature request.
+* Currently the Webex Teams Authentication works with a temporary token. This will be improved with an official Webex Teams Integration (roadmapped for v3.0).
