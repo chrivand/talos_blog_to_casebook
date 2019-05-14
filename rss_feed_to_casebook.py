@@ -28,9 +28,9 @@ def open_config():
     '''
     this function opens config.json
     '''
-    if os.path.isfile("config_new.json"):
+    if os.path.isfile("config.json"):
         global config_file
-        with open("config_new.json", 'r') as config_file:
+        with open("config.json", 'r') as config_file:
             config_file = json.loads(config_file.read())
             print("\nThe config.json file was loaded.\n")
     else:
@@ -42,7 +42,7 @@ def write_config():
     ''' 
     This function writes to config.json
     '''
-    with open("config_new.json", 'w') as output_file:
+    with open("config.json", 'w') as output_file:
         json.dump(config_file, output_file, indent=4)
 
 
