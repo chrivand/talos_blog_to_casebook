@@ -1,9 +1,26 @@
 {
     "client_id": "<your_client_id>",
     "client_secret": "<your_client_secret>",
-    "last_etag": "",
-    "last_modified": "",
     "webex_access_token": "<your_webex_access_token>",
-    "webex_room_id": "<your_webex_room_id",
-    "url_feed": "http://feeds.feedburner.com/feedburner/Talos"
+    "webex_room_id": "<your_webex_room_id>",
+    "url_feeds": [
+        {
+            "feed_name": "[Talos RSS Feed]",
+            "rss_url": "http://feeds.feedburner.com/feedburner/Talos",
+            "last_etag": "",
+            "last_modified": 0
+        },
+        {
+            "feed_name": "[FortiGuard RSS Feed]",
+            "rss_url": "http://feeds.feedburner.com/fortinet/blog/threat-research",
+            "last_etag": "",
+            "last_modified": 0
+        },
+        {
+            "feed_name": "[Unit 42 RSS Feed]",
+            "rss_url": "http://feeds.feedburner.com/PaloAltoNetworks",
+            "last_etag": "",
+            "last_modified": 0
+        }
+    ]
 }
