@@ -1,4 +1,4 @@
-print("\n\n***************\n\nCREATED BY CHRISTOPHER VAN DER MADE (CHRIVAND)\n\n***************\n\n")
+print("\n\n**************\n\nCREATED BY CHRISTOPHER VAN DER MADE (CHRIVAND)\n\n**************\n\n")
 
 # NOTE: this is a Proof of Concept script, please test before using in production!
 
