@@ -44,7 +44,7 @@ This is a sample script to parse the Talos blog and automatically add observable
   ```
   {
       "client_id": "<your_client_id>",
-      "client_secret": "<your_client_secret",
+      "client_secret": "<your_client_secret>",
       "last_etag": "",
       "last_modified": "",
       "webex_access_token": "<your_webex_access_token>",
