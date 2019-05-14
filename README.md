@@ -10,10 +10,11 @@ This is a sample script to parse the Talos blog and automatically add observable
 3. The script now also checks for Target Sightings. If there is a Sighting of a Target, the Webex Teams message and the Case description in Casebook will get a "HIGH PRIOIRTY" tag.
 4. The script now has support for more RSS feeds. The FortiGuard and Unit42 RSS feeds have now been added as example (on top of the Talos RSS Feed).
 5. The script will use the RSS feed "entry.link" to download the full blogpost, and does not just look at the "entry.description" of the RSS feed. The FortiGuard blog for example does not include the observables in their RSS feed, but only shows them on the actual original blog post.
-6. The script has generally been cleaned up.
+6. Since the script has been expanded, it now can run longer than 10 minutes. This is actually the expiration time of the CTR OAuth token. Therefore, every API call now retrieves a new OAuth token.
+7. The script has generally been cleaned up.
 
 ## Overview
-1. The script leverages the Talos Blog RSS (or other blogs) feed to retrieve all the current blogs.
+1. The script leverages the Cisco Talos, FortiGuard and Unit42 blog RSS feeds (and/or other blogs) to retrieve all the current blogs.
 2. It will then check if this is the first time the script has run:
    * If the script is being run for the first time, it will parse through all blogs.
    * If the script has run before, it will check if there was an update to the blog (using the “last_modified” element from RSS).
