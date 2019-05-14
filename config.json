@@ -18,7 +18,7 @@
         },
         {
             "feed_name": "[Unit 42 RSS Feed]",
-            "rss_url": "http://feeds.feedburner.com/PaloAltoNetworks",
+            "rss_url": "http://feeds.feedburner.com/Unit42",
             "last_etag": "",
             "last_modified": 0
         }
