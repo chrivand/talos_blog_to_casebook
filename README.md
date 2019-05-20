@@ -7,6 +7,9 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
 * For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction]().
 * If you would like to see a demo of the script, please check out the following video: [https://youtu.be/cCe3y6XZqs0]().
 
+[![Alt text](https://img.youtube.com/vi/cCe3y6XZqs0/0.jpg)](https://www.youtube.com/watch?v=cCe3y6XZqs0)
+
+
 ## Release notes version 2.0
 1. The ciscospark library has been updated to the newer webexteamssdk library.
 2. The script now also removes all clean observables from the case to stop false positives. Often legitimate websites are added in a blog, but are not an observable associated directly with the malware campaign. This causes Target Sightings, without them being of much interest. Removing these from the investigation is also better for the performance of the script. 
