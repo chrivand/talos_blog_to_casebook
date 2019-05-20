@@ -5,10 +5,10 @@
 This is a sample script to parse the Cisco Talos blog (and other blogs!), check for Target Sightings and automatically add observables to Cisco Casebook. This enables Security Researchers and Threat Responders in a SOC to quickly see if the observables from Talos have been seen in their environment (by leveraging Cisco Threat Response (CTR)). 
 
 * For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction]().
-* If you would like to see a demo of the script, please check out the following video: [https://youtu.be/cCe3y6XZqs0]().
+* If you would like to see a demo of the script, please check out the video below: 
 
+[https://youtu.be/cCe3y6XZqs0]().
 [![Alt text](https://img.youtube.com/vi/cCe3y6XZqs0/0.jpg)](https://www.youtube.com/watch?v=cCe3y6XZqs0)
-
 
 ## Release notes version 2.0
 1. The ciscospark library has been updated to the newer webexteamssdk library.
