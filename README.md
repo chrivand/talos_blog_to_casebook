@@ -4,7 +4,7 @@
 
 This is a sample script to parse the Cisco Talos blog (and other blogs!), check for Target Sightings and automatically add observables to Cisco Casebook. This enables Security Researchers and Threat Responders in a SOC to quickly see if the observables from Talos have been seen in their environment (by leveraging Cisco Threat Response (CTR)). 
 
-* For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction]().
+* For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction](https://visibility.amp.cisco.com/#/help/introduction).
 * If you would like to see a demo of the script, please check out the video below: 
 
 [https://youtu.be/cCe3y6XZqs0]()
@@ -36,8 +36,8 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
 
 ## Installation
 1. Clone this repository or download the ZIP file.
-2. Log in to [https://visibility.amp.cisco.com/]() with your Cisco Security credentials.
-3. Make sure that you have Casebook enabled (+ the Casebook AMP, Threat Grid and Chrome widget, for extended functionality). Please find more information here: [https://visibility.amp.cisco.com/#/help/casebooks]().
+2. Log in to [https://visibility.amp.cisco.com/](https://visibility.amp.cisco.com/) with your Cisco Security credentials.
+3. Make sure that you have Casebook enabled (+ the Casebook AMP, Threat Grid and Chrome widget, for extended functionality). Please find more information here: [https://visibility.amp.cisco.com/#/help/casebooks](https://visibility.amp.cisco.com/#/help/casebooks).
 4. Click on **Modules**.
 5. Click on **API Clients**.
 6. Click on **Add API Credentials**.
@@ -46,7 +46,7 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
 9. Add an optional description if needed.
 10. Click on **Add New Client**.
 11. The **Client ID** and **Client Secret** are now shown to you. Do NOT click on **close** until you have copy-pasted these credentials to the config.json file in the repository.
-12. It is possible to integrate the script with Webex Teams. In order to do that, an API Access Token and a Room ID need to be entered in the config.json file. Please retrieve your key from: [https://developer.webex.com/docs/api/getting-started](). Then create a dedicated Webex Teams space for these notifications and retrieve the Room ID from: [https://developer.webex.com/docs/api/v1/rooms/list-rooms](). Please be aware that the personal token from the getting started page only works for 12 hours. Please follow these steps: [https://developer.webex.com/docs/integrations](). This is roadmapped for v3.0.
+12. It is possible to integrate the script with Webex Teams. In order to do that, an API Access Token and a Room ID need to be entered in the config.json file. Please retrieve your key from: [https://developer.webex.com/docs/api/getting-started](https://developer.webex.com/docs/api/getting-started). Then create a dedicated Webex Teams space for these notifications and retrieve the Room ID from: [https://developer.webex.com/docs/api/v1/rooms/list-rooms](https://developer.webex.com/docs/api/v1/rooms/list-rooms). Please be aware that the personal token from the getting started page only works for 12 hours. Please follow these steps: [https://developer.webex.com/docs/integrations](https://developer.webex.com/docs/integrations). This is roadmapped for v3.0.
 13. Make sure that the config.json file looks like this (with the right keys and IDs filled in between the quotes):
 
   ```
@@ -84,8 +84,8 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
 17. You are now done. 
 
 ## Notes and Road Map
-* Please feel free to use **crontab** to run the script every day. The script will handle this and create a new casebook only if a new blog is added. There is detailed information on how to use crontab here: [https://pypi.org/project/python-crontab/](). 
-* Otherwise, you can also use a function I previously wrote, which is the **intervalScheduler** function in this script: [https://github.com/chrivand/Firepower_O365_Feed_Parser/blob/VERSION-3.0/O365WebServiceParser.py](). 
+* Please feel free to use **crontab** to run the script every day. The script will handle this and create a new casebook only if a new blog is added. There is detailed information on how to use crontab here: [https://pypi.org/project/python-crontab/](https://pypi.org/project/python-crontab/). 
+* Otherwise, you can also use a function I previously wrote, which is the **intervalScheduler** function in this script: [https://github.com/chrivand/Firepower_O365_Feed_Parser/blob/VERSION-3.0/O365WebServiceParser.py](https://github.com/chrivand/Firepower_O365_Feed_Parser/blob/VERSION-3.0/O365WebServiceParser.py). 
 * This script works with the Talos, FortiGuard and Unit42 RSS feed, but potentially it will also work with other RSS feeds. You will need to add or change the **url_feeds** variable (in config.json) with another RSS feed. Also, you might need to clean the hyperlinks, etc., out of the blogs in a different way (even though I am doing this quite genericly).
 * I will keep updating this script and you can also do a pull request with an update.
 * Please open an "Issue" if there is something not working or if you have a feature request.
