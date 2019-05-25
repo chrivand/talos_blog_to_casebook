@@ -7,7 +7,7 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
 * For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction](https://visibility.amp.cisco.com/#/help/introduction).
 * If you would like to see a demo of the script, please check out the video below: 
 
-[https://youtu.be/cCe3y6XZqs0]()
+[https://youtu.be/cCe3y6XZqs0](https://youtu.be/cCe3y6XZqs0)
 
 [![Alt text](https://img.youtube.com/vi/cCe3y6XZqs0/0.jpg)](https://www.youtube.com/watch?v=cCe3y6XZqs0)
 
