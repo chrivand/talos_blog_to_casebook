@@ -11,6 +11,9 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
 
 [![Alt text](https://img.youtube.com/vi/cCe3y6XZqs0/0.jpg)](https://www.youtube.com/watch?v=cCe3y6XZqs0)
 
+## Known issues
+1. Currently there is no limit on the amount of obsevables (or the size of the blog post) to be parsed by the script. This *might* cause errors when running this with some blog posts (e.g. the Talos Threat Roundup). Version 3.0 will have this rate limiting built in to adhere to the 2000 character max that should be added to an investigation. You can find more info on that on the following [link](https://community.cisco.com/t5/security-documents/what-is-the-largest-amount-of-text-or-observables-i-can-submit/ta-p/3900940).
+
 ## Release notes version 2.0
 1. The ciscospark library has been updated to the newer webexteamssdk library.
 2. The script now also removes all clean observables from the case to stop false positives. Often legitimate websites are added in a blog, but are not an observable associated directly with the malware campaign. This causes Target Sightings, without them being of much interest. Removing these from the investigation is also better for the performance of the script. 
