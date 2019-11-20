@@ -300,7 +300,7 @@ def new_casebook(feed_name,returned_observables_json,returned_sightings,entry_ti
         print(f"[201] Success, case added to Casebook added from {feed_name}: {entry_title}\n")
         
         # if Webex Teams tokens set, then send message to Webex room
-        if config_file['webex_access_token'] is '' or config_file['webex_room_id'] is '':
+        if config_file['webex_access_token'] == '' or config_file['webex_room_id'] == '':
 
             # user feed back
             print("Webex Teams not set.\n\n")
