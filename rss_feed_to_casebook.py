@@ -15,7 +15,7 @@ print("\n\n**************\n\nCREATED BY CHRISTOPHER VAN DER MADE (CHRIVAND)\n\n*
 # or implied.
 
 import requests
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import json
 import feedparser
@@ -168,7 +168,8 @@ def clean_entry(entry_link):
     ''' 
 
     # retrieve text with html parser
-    html = urlopen(entry_link).read()
+    req_with_user_agent = Request(entry_link, headers={"User-Agent": "Chrome"})
+    html = urlopen(req_with_user_agent).read()
     soup = BeautifulSoup(html, "html.parser")
 
     # kill all script and style elements
