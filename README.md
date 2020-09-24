@@ -1,10 +1,10 @@
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/chrivand/talos_blog_to_casebook)
 
-# RSS Feed Blog Parser to Cisco Threat Response Casebook [v2.0]
+# RSS Feed Blog Parser to Cisco SecureX Threat Response Casebook [v2.0]
 
-This is a sample script to parse the Cisco Talos blog (and other blogs!), check for Target Sightings and automatically add observables to Cisco Casebook. This enables Security Researchers and Threat Responders in a SOC to quickly see if the observables from Talos have been seen in their environment (by leveraging Cisco Threat Response (CTR)). 
+This is a sample script to parse the Cisco Talos blog (and other blogs!), check for Target Sightings and automatically add observables to Cisco Casebook. This enables Security Researchers and Threat Responders in a SOC to quickly see if the observables from Talos have been seen in their environment (by leveraging SecureX Threat Response (SxTR)). 
 
-* For more information on how to use CTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction](https://visibility.amp.cisco.com/#/help/introduction).
+* For more information on how to use SxTR, please review this link: [https://visibility.amp.cisco.com/#/help/introduction](https://visibility.amp.cisco.com/#/help/introduction).
 * If you would like to see a demo of the script, please check out the video below: 
 
 [https://youtu.be/cCe3y6XZqs0](https://youtu.be/cCe3y6XZqs0)
@@ -20,7 +20,7 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
 3. The script now also checks for Target Sightings. If there is a Sighting of a Target, the Webex Teams message and the Case description in Casebook will get a "HIGH PRIORITY" tag.
 4. The script now has support for more RSS feeds. The FortiGuard and Unit42 RSS feeds have now been added as example (on top of the Talos RSS Feed).
 5. The script will use the RSS feed "entry.link" to download the full blogpost, and does not just look at the "entry.description" of the RSS feed. The FortiGuard blog for example does not include the observables in their RSS feed, but only shows them on the actual original blog post.
-6. Since the script has been expanded, it now can run longer than 10 minutes. This is actually the expiration time of the CTR OAuth token. Therefore, every API call now retrieves a new OAuth token.
+6. Since the script has been expanded, it now can run longer than 10 minutes. This is actually the expiration time of the SxTR OAuth token. Therefore, every API call now retrieves a new OAuth token.
 7. The script has generally been cleaned up.
 
 ## Overview
@@ -31,10 +31,10 @@ This is a sample script to parse the Cisco Talos blog (and other blogs!), check 
      * If there was an update -> parse all the new blogs.
      * If there was no update -> do nothing.
 3.	During the parsing of the blog, an attempt is made to remove False Positives, like hyperlinks to other webpages (e.g., Snort.org). 
-4. After this the CTR API is used to retrieve all the observables from the cleaned blog.
-5. In version 2.0 it now removes observables with a clean disposition (retrieved from CTR API).
+4. After this the SxTR API is used to retrieve all the observables from the cleaned blog.
+5. In version 2.0 it now removes observables with a clean disposition (retrieved from SxTR API).
 6. In version 2.0 it now also checks for Target Sightings. If there is a Sighting of a Target, the Webex Teams message and the Case description in Casebook will get a "HIGH PRIOIRTY" tag.
-5. The last step is to create a CTR Casebook with the retrieved observables. The title of the blog and the link to the blog will be added into the Case. Optionally, a Webex Teams message is sent to a room to update the Threat Responder.
+5. The last step is to create a SxTR Casebook with the retrieved observables. The title of the blog and the link to the blog will be added into the Case. Optionally, a Webex Teams message is sent to a room to update the Threat Responder.
 
 
 ## Installation
