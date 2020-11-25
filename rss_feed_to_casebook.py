@@ -189,6 +189,9 @@ def clean_entry(entry_link):
 
     # retrieve observables from text
     returned_observables_json = return_observables(parsed_text)
+    number_of_observables = len(json.loads(returned_observables_json))
+    if number_of_observables >= 15:
+        print(f"It seems like you have found a lot of observables ({number_of_observables}), this might take a while! Maybe grab a coffee?\n")
 
     # return non clean (malicious, unkown etc.) observables only
     non_clean_observables_json = return_non_clean_observables(returned_observables_json) 
@@ -295,6 +298,12 @@ def new_casebook(feed_name,returned_observables_json,returned_sightings,entry_ti
         "timestamp": casebook_datetime   
     })
 
+    # create CTR search url
+    search_base_url = "https://visibility.amp.cisco.com/investigate?q="
+    for observable in json.loads(returned_observables_json):
+        search_string_to_append = observable["type"] + "%3A" + observable["value"] + "%0A"
+        search_base_url = search_base_url + search_string_to_append
+
     # post request to create casebook
     response = requests.post('https://private.intel.amp.cisco.com/ctia/casebook', headers=headers, data=casebook_json)
     if response.status_code == 201:
@@ -312,11 +321,11 @@ def new_casebook(feed_name,returned_observables_json,returned_sightings,entry_ti
             # post a message to the specified Webex room 
             try:
                 if returned_sightings['total_sighting_count'] == 0:
-                    webex_text = feed_name + " New case has been added to casebook from RSS Feed: " + entry_title
-                    message = teams.messages.create(config_file['webex_room_id'], text=webex_text) 
+                    webex_text =f"\n\n---\n**New case added to SecureX Casebook added from feed: {feed_name}!**\n\nNew blog post: *{entry_title}*.\n\n**Investigate directly with SecureX threat response:** {search_base_url}\n\n---\n"
+                    message = teams.messages.create(config_file['webex_room_id'], markdown=webex_text) 
                 if returned_sightings['total_sighting_count'] != 0:
-                    webex_text = feed_name + " New case has been added to casebook from RSS Feed: " + entry_title + ". 🚨🚨🚨  HIGH PRIORITY, Target Sightings have been identified! AMP targets: " + str(returned_sightings['total_amp_sighting_count']) + ", Umbrella targets: " + str(returned_sightings['total_umbrella_sighting_count']) + ", Email targets: " + str(returned_sightings['total_email_sighting_count']) + ". 🚨🚨🚨"
-                    message = teams.messages.create(config_file['webex_room_id'], text=webex_text)
+                    webex_text =f"\n\n---\n**New case added to SecureX Casebook added from feed: {feed_name}!**\n\nNew blog post: *{entry_title}*.\n\n🚨🚨🚨  HIGH PRIORITY, Target Sightings have been identified! AMP targets: {str(returned_sightings['total_amp_sighting_count'])}, Umbrella targets: {str(returned_sightings['total_umbrella_sighting_count'])}, Email targets: {str(returned_sightings['total_email_sighting_count'])}. 🚨🚨🚨\n\n**Investigate directly with SecureX threat response:** {search_base_url}\n\n---\n"
+                    message = teams.messages.create(config_file['webex_room_id'], markdown=webex_text)
             # error handling, if for example the Webex API key expired
             except Exception:
                 print("Webex authentication failed... Please make sure Webex Teams API key has not expired. Please review developer.webex.com for more info.\n")
@@ -432,7 +441,3 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print("\nExiting...\n")
-
-
-
-
