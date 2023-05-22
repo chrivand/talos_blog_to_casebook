@@ -1,4 +1,4 @@
-requests==2.21.0
+requests==2.31.0
 beautifulsoup4==4.7.1
 feedparser==5.2.1
 webexteamssdk==1.1.1
